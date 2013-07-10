@@ -22,7 +22,7 @@ namespace AzureStorageCleanup
         }
 
         public void Cleanup()
-        {            
+        {
             StorageCredentials storageCredentials = new StorageCredentials(storageAccountName, storageAccessKey);
             CloudStorageAccount account = new CloudStorageAccount(storageCredentials, true);
 
@@ -47,7 +47,8 @@ namespace AzureStorageCleanup
 
             foreach (CloudBlockBlob blob in blobList)
             {
-                Console.WriteLine("Deleting blob storage file {0}\\{1}, {2} days old", containerName, blob.Name, (referenceDate - blob.Properties.LastModified.Value).TotalDays);
+                double blobAgeInDays = (referenceDate - blob.Properties.LastModified.Value).TotalDays;
+                Console.WriteLine("Deleting blob storage file {0}\\{1}, {2} days old", containerName, blob.Name, Math.Round(blobAgeInDays, 3));
                 blob.DeleteIfExists();
             }
 
