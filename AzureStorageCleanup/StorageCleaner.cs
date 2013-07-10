@@ -51,7 +51,7 @@ namespace AzureStorageCleanup
                 blob.DeleteIfExists();
             }
 
-            Console.WriteLine("{0} blob storage files deleted in {0}\\{1} older than {2} days", storageAccountName, containerName, minDaysOld);
+            Console.WriteLine("{0} blob storage files deleted in {1}\\{2} older than {3} days", blobList.Count, storageAccountName, containerName, minDaysOld);
         }
     }
 }
