@@ -12,6 +12,7 @@ namespace AzureStorageCleanup
             internal const string StorageKey = "-storagekey";
             internal const string Container = "-container";
             internal const string MinDaysOld = "-mindaysold";
+            internal const string Recursive = "-recursive";
         }
 
         static void Main(string[] args)
@@ -38,8 +39,10 @@ namespace AzureStorageCleanup
                 Console.WriteLine(string.Format("Please supply a valid \"{0}\" argument", CommandLineArgument.MinDaysOld));
                 return;
             }
+
+            bool recursive = args.Contains(CommandLineArgument.Recursive);
             
-            StorageCleaner storageCleaner = new StorageCleaner(storageAccountName, storageAccessKey, containerName, minDaysOld);
+            StorageCleaner storageCleaner = new StorageCleaner(storageAccountName, storageAccessKey, containerName, minDaysOld, recursive);
             storageCleaner.Cleanup();
         }
 
@@ -56,6 +59,7 @@ namespace AzureStorageCleanup
         -storagekey  [Blob Storage account key]
         -container   [Blob Storage container to use]
         -mindaysold  [Minimum age of files to delete]
+        -recursive   [Optional - delete all files in virtual hierarchy]
 
     Example usage:
 
@@ -64,6 +68,7 @@ namespace AzureStorageCleanup
         -storagekey dmASdd1mg/qPeOgGmCkO333L26cNcnUA1uMcSSOFM...
         -container sqlbackup
         -mindaysold 60
+        -recursive
     ");
         }
 

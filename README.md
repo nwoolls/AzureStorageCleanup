@@ -12,6 +12,7 @@ Please supply for following command line arguments:
     -storagekey  [Blob Storage account key]
     -container   [Blob Storage container to use]
     -mindaysold  [Minimum age of files to delete]
+    -recursive   [Optional - delete all files in virtual hierarchy]
 ```
 
 Example usage:
@@ -22,6 +23,7 @@ AzureStorageCleanup.exe
     -storagekey dmASdd1mg/qPeOgGmCkO333L26cNcnUA1uMcSSOFM...
     -container sqlbackup
     -mindaysold 60
+    -recursive
 ```
 
 ### How it works

@@ -12,13 +12,15 @@ namespace AzureStorageCleanup
         private readonly string storageAccessKey;
         private readonly string containerName;
         private readonly int minDaysOld;
+        private readonly bool recursive;
 
-        public StorageCleaner(string storageAccountName, string storageAccessKey, string containerName, int minDaysOld)
+        public StorageCleaner(string storageAccountName, string storageAccessKey, string containerName, int minDaysOld, bool recursive)
         {
             this.storageAccountName = storageAccountName;
             this.storageAccessKey = storageAccessKey;
             this.containerName = containerName;
             this.minDaysOld = minDaysOld;
+            this.recursive = recursive;
         }
 
         public void Cleanup()
@@ -33,7 +35,7 @@ namespace AzureStorageCleanup
             Console.WriteLine("Deleting blob storage files in {0}\\{1} older than {2} days", storageAccountName, containerName, minDaysOld);
 
             DateTime referenceDate = DateTime.UtcNow;
-            var blobQuery = from b in container.ListBlobs().OfType<CloudBlockBlob>()
+            var blobQuery = from b in container.ListBlobs(null, recursive).OfType<CloudBlockBlob>()
                             where b.Properties.LastModified <= referenceDate.AddDays(-minDaysOld)
                             select b;
 
