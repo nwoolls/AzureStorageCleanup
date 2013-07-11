@@ -32,7 +32,7 @@ namespace AzureStorageCleanup
 
             CloudBlobContainer container = blobClient.GetContainerReference(containerName);
 
-            Console.WriteLine("Deleting blob storage files in {0}\\{1} older than {2} days", storageAccountName, containerName, minDaysOld);
+            Console.WriteLine("Deleting blob storage files in {0}/{1} older than {2} days", storageAccountName, containerName, minDaysOld);
 
             DateTime referenceDate = DateTime.UtcNow;
             var blobQuery = from b in container.ListBlobs(null, recursive).OfType<CloudBlockBlob>()
@@ -43,18 +43,18 @@ namespace AzureStorageCleanup
 
             if (blobList.Count == 0)
             {
-                Console.WriteLine("No files found in {0}\\{1} older than {2} days", storageAccountName, containerName, minDaysOld);
+                Console.WriteLine("No files found in {0}/{1} older than {2} days", storageAccountName, containerName, minDaysOld);
                 return;
             }
 
             foreach (CloudBlockBlob blob in blobList)
             {
                 double blobAgeInDays = (referenceDate - blob.Properties.LastModified.Value).TotalDays;
-                Console.WriteLine("Deleting blob storage file {0}\\{1}, {2} days old", containerName, blob.Name, Math.Round(blobAgeInDays, 3));
+                Console.WriteLine("Deleting blob storage file {0}/{1}, {2} days old", containerName, blob.Name, Math.Round(blobAgeInDays, 3));
                 blob.DeleteIfExists();
             }
 
-            Console.WriteLine("{0} blob storage files deleted in {1}\\{2} older than {3} days", blobList.Count, storageAccountName, containerName, minDaysOld);
+            Console.WriteLine("{0} blob storage files deleted in {1}/{2} older than {3} days", blobList.Count, storageAccountName, containerName, minDaysOld);
         }
     }
 }
