@@ -35,7 +35,7 @@ namespace AzureStorageCleanup
             Console.WriteLine("Deleting blob storage files in {0}/{1} older than {2} days", storageAccountName, containerName, minDaysOld);
 
             DateTime referenceDate = DateTime.UtcNow;
-            var blobQuery = from b in container.ListBlobs(null, recursive).OfType<CloudBlockBlob>()
+            var blobQuery = from b in container.ListBlobs(null, recursive).OfType<ICloudBlob>()
                             where b.Properties.LastModified <= referenceDate.AddDays(-minDaysOld)
                             select b;
 
@@ -47,7 +47,7 @@ namespace AzureStorageCleanup
                 return;
             }
 
-            foreach (CloudBlockBlob blob in blobList)
+            foreach (ICloudBlob blob in blobList)
             {
                 double blobAgeInDays = (referenceDate - blob.Properties.LastModified.Value).TotalDays;
                 Console.WriteLine("Deleting blob storage file {0}/{1}, {2} days old", containerName, blob.Name, Math.Round(blobAgeInDays, 3));
