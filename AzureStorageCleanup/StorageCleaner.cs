@@ -51,7 +51,16 @@ namespace AzureStorageCleanup
             {
                 double blobAgeInDays = (referenceDate - blob.Properties.LastModified.Value).TotalDays;
                 Console.WriteLine("Deleting blob storage file {0}/{1}, {2} days old", containerName, blob.Name, Math.Round(blobAgeInDays, 3));
-                blob.DeleteIfExists();
+                blob.FetchAttributes();
+                if (blob.Properties.LeaseStatus == LeaseStatus.Locked)
+                {
+                    blob.BreakLease();
+                    blob.Delete(DeleteSnapshotsOption.None);
+                }
+                else
+                {
+                    blob.DeleteIfExists();
+                }
             }
 
             Console.WriteLine("{0} blob storage files deleted in {1}/{2} older than {3} days", blobList.Count, storageAccountName, containerName, minDaysOld);
